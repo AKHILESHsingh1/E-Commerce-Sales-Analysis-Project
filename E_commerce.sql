@@ -18,8 +18,8 @@ CREATE TABLE products (
  create table orders(
     order_id int primary key,
     customer_id int,
-	order_date date,
-	foreign key (customer_id) references customer(ID));
+    order_date date,
+    foreign key (customer_id) references customer(ID));
     
 create table order_items(
 order_items_id int primary key,
@@ -79,40 +79,22 @@ INSERT INTO payments (payment_id, order_id, payment_method, amount, status) VALU
 # Total_Revenue
 select sum(quantity*unit_price) as Total_Revenue from order_items;
 
-select * from products;
-select * from order_items;
-
 # Top 3 best-selling products
-select
- p.name, sum(oi.quantity) as total_sold 
- from products as p 
- join 
- order_items as oi 
-on 
-p.product_ID=oi.product_id
+select p.name, sum(oi.quantity) as total_sold from products as p join order_items as oi on p.product_ID=oi.product_id
 group by p.name
-order by 
-sum(oi.quantity) desc 
+order by sum(oi.quantity) desc 
 limit 3;
 
 
-# for top 3 best product by revenue
-select
- p.name, sum(oi.quantity* unit_price) as total_Revenue 
- from products as p 
- join 
- order_items as oi 
-on 
-p.product_ID=oi.product_id
+# Top 3 best product by revenue
+	
+select p.name, sum(oi.quantity* unit_price) as total_Revenue from products as p join order_items as oi on p.product_ID=oi.product_id
 group by p.name
-order by 
-sum(oi.quantity* unit_price) desc 
+order by sum(oi.quantity* unit_price) desc 
 limit 3;
 
 #  Monthly sales trend
-select 
-month(order_date),sum(quantity*unit_price) as taotalrevenue_by_months
-from orders as o join order_items as oi 
+select month(order_date),sum(quantity*unit_price) as taotalrevenue_by_months from orders as o join order_items as oi 
 on o.order_id=oi.order_id 
 group by month(order_date);
 
